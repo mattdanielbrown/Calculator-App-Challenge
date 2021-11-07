@@ -8,10 +8,10 @@
 import SwiftUI
 
 @main
-struct Calculator_App_ChallengeApp: App {
+struct Calculator_App_Challenge: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            HomeView().environmentObject(CalculatorModel())
         }
     }
 }
