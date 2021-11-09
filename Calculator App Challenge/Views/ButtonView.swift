@@ -58,7 +58,13 @@ struct ButtonView: View {
                 Text(label)
                     .font(.title)
                     .bold()
-                    .foregroundColor(label == Constants.addition && CalculatorModel.op == Constants.addition ? buttonColor : textColor)
+                    .foregroundColor((
+                        ((label == Constants.addition && CalculatorModel.op == Constants.addition)
+                        || (label == Constants.subtraction && CalculatorModel.op == Constants.subtraction)
+                        || (label == Constants.multiplication && CalculatorModel.op == Constants.multiplication)
+                        || (label == Constants.division && CalculatorModel.op == Constants.division))
+                        
+                        && CalculatorModel.currentNumber == nil) ? buttonColor : textColor)
             }
         }
     }
