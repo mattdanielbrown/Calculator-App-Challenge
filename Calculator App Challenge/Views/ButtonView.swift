@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct ButtonView: View {
+    
+    @EnvironmentObject var CalculatorModel: CalculatorModel
+
     let label: String
     let buttonColor: Color
     var textColor = Color("White")
@@ -27,7 +30,7 @@ struct ButtonView: View {
 
     var body: some View {
         Button {
-            //TODO: display button press on calculator
+            CalculatorModel.buttonPressed(label: self.label)
         } label: {
             ZStack {
                 

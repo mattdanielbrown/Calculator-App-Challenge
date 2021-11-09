@@ -25,15 +25,15 @@ struct HomeView: View {
                     .padding(.bottom)
                     .padding(.trailing, 45)
                     
-                ButtonRow(labels: ["CE", "", "", String("\u{00f7}")], buttonColors: [Color("Gray"), Color("Gray"), Color("Gray"), Color("Orange")], textColors: [Color("Black"), Color("White"), Color("White"), Color("White")], geo: geo)
+                ButtonRow(labels: ["CE", "", "", Constants.division], buttonColors: [Color("Gray"), Color("Gray"), Color("Gray"), Color("Orange")], textColors: [Color("Black"), Color("White"), Color("White"), Color("White")], geo: geo)
                 
-                ButtonRow(labels: ["7", "8", "9", String("\u{00d7}")], geo: geo)
+                ButtonRow(labels: ["7", "8", "9", Constants.multiplication], geo: geo)
                 
-                ButtonRow(labels: ["4", "5", "6", String("\u{00d7}")], geo: geo)
+                ButtonRow(labels: ["4", "5", "6", Constants.subtraction], geo: geo)
                 
-                ButtonRow(labels: ["1", "2", "3", String("\u{00d7}")], geo: geo)
+                ButtonRow(labels: ["1", "2", "3", Constants.addition], geo: geo)
                 
-                ButtonRow(labels: ["0", ".", String("\u{003d}")], geo: geo)
+                ButtonRow(labels: ["0", ".", Constants.equals], geo: geo)
             }
             .frame(width: geo.size.width)
             .padding(.bottom)

@@ -14,6 +14,7 @@
 		621CCA7B27381DE100CBFDEB /* ButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 621CCA7A27381DE100CBFDEB /* ButtonView.swift */; };
 		621CCA80273824AD00CBFDEB /* ButtonRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 621CCA7F273824AD00CBFDEB /* ButtonRow.swift */; };
 		62412614273866BE00235FC2 /* CalculatorModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62412613273866BE00235FC2 /* CalculatorModel.swift */; };
+		62EBAB082738D07B00002D50 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62EBAB072738D07B00002D50 /* Constants.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -25,6 +26,7 @@
 		621CCA7A27381DE100CBFDEB /* ButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonView.swift; sourceTree = "<group>"; };
 		621CCA7F273824AD00CBFDEB /* ButtonRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonRow.swift; sourceTree = "<group>"; };
 		62412613273866BE00235FC2 /* CalculatorModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculatorModel.swift; sourceTree = "<group>"; };
+		62EBAB072738D07B00002D50 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +62,7 @@
 				621CCA6927381C6A00CBFDEB /* Calculator_App_Challenge.swift */,
 				621CCA7727381CC000CBFDEB /* Views */,
 				621CCA7927381CD100CBFDEB /* View Models */,
+				62EBAB062738D06A00002D50 /* Constants */,
 				621CCA6D27381C6B00CBFDEB /* Assets.xcassets */,
 				621CCA6F27381C6B00CBFDEB /* Preview Content */,
 			);
@@ -90,6 +93,14 @@
 				62412613273866BE00235FC2 /* CalculatorModel.swift */,
 			);
 			path = "View Models";
+			sourceTree = "<group>";
+		};
+		62EBAB062738D06A00002D50 /* Constants */ = {
+			isa = PBXGroup;
+			children = (
+				62EBAB072738D07B00002D50 /* Constants.swift */,
+			);
+			path = Constants;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -167,6 +178,7 @@
 				621CCA6A27381C6A00CBFDEB /* Calculator_App_Challenge.swift in Sources */,
 				621CCA80273824AD00CBFDEB /* ButtonRow.swift in Sources */,
 				621CCA7B27381DE100CBFDEB /* ButtonView.swift in Sources */,
+				62EBAB082738D07B00002D50 /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
