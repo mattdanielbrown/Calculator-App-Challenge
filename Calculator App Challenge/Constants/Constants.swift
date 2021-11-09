@@ -13,5 +13,7 @@ struct Constants {
     static var subtraction = String("\u{2212}")
     static var multiplication = String("\u{00d7}")
     static var division = String("\u{00f7}")
+    static var negation = String("\u{00b1}")
+    static var percentage = String("\u{0025}")
     
 }

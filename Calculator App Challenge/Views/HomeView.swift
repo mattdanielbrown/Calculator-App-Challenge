@@ -25,7 +25,8 @@ struct HomeView: View {
                     .padding(.bottom)
                     .padding(.trailing, 45)
                     
-                ButtonRow(labels: ["CE", "", "", Constants.division], buttonColors: [Color("Gray"), Color("Gray"), Color("Gray"), Color("Orange")], textColors: [Color("Black"), Color("White"), Color("White"), Color("White")], geo: geo)
+                ButtonRow(labels: ["CE", Constants.negation,
+                                   Constants.percentage, Constants.division], buttonColors: [Color("Gray"), Color("Gray"), Color("Gray"), Color("Orange")], textColors: [Color("Black"), Color("White"), Color("White"), Color("White")], geo: geo)
                 
                 ButtonRow(labels: ["7", "8", "9", Constants.multiplication], geo: geo)
                 

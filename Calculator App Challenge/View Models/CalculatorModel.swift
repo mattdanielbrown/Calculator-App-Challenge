@@ -45,7 +45,7 @@ class CalculatorModel: ObservableObject {
         else {
             
             // If numbers and operators chained together, update total and display value
-            if previousNumber != nil && currentNumber != nil && label != "." {
+            if previousNumber != nil && currentNumber != nil && (label == Constants.addition || label == Constants.subtraction || label == Constants.multiplication || label == Constants.division) {
                 calculate()
                 displayText = removeTrailingZeros(number: total)
             }
@@ -79,32 +79,39 @@ class CalculatorModel: ObservableObject {
     
     
     func calculate () {
+        
         switch self.op {
             
         case Constants.addition:
-            total = previousNumber! + currentNumber!
+            total = (previousNumber ?? 0) + (currentNumber ?? 0)
             
         case Constants.subtraction:
-            total = previousNumber! - currentNumber!
-            
+            total = (previousNumber ?? 0) - (currentNumber ?? 0)
+
         case Constants.multiplication:
-            total = previousNumber! * currentNumber!
-            
+            total = (previousNumber ?? 0) * (currentNumber ?? 0)
+
         case Constants.division:
             if currentNumber == 0 {
                 displayText = "Error"
             }
             else {
-                total = previousNumber! / currentNumber!
+                total = (previousNumber ?? 0) / currentNumber!
             }
             
         default:
-            break
+            if currentNumber != nil {
+                total = currentNumber!
+            }
+            else if previousNumber != nil {
+                total = previousNumber!
+            }
+            displayText = removeTrailingZeros(number: total)
         }
         
         self.op = nil
         previousNumber = total
-        currentNumber = 0
+        currentNumber = nil
     }
     
     func setOp (op: String) {
@@ -119,7 +126,7 @@ class CalculatorModel: ObservableObject {
                 previousNumber = 0
             }
             
-            previousNumber! += currentNumber!
+            previousNumber! += Double(currentNumber ?? 0)
             
             currentNumber = nil
             
@@ -148,6 +155,30 @@ class CalculatorModel: ObservableObject {
                 {
                     displayText = displayText + "."
                 }
+            }
+            
+        case Constants.negation:
+            
+            //Before pressing equals
+            if currentNumber != nil {
+                currentNumber!.negate()
+                displayText = removeTrailingZeros(number: currentNumber!)
+            }
+            //After pressing equals
+            else if previousNumber != nil {
+                previousNumber!.negate()
+                displayText = removeTrailingZeros(number: previousNumber!)
+            }
+            
+            
+        case Constants.percentage:
+            if currentNumber != nil {
+                currentNumber = currentNumber!/100
+                displayText = removeTrailingZeros(number: currentNumber!)
+            }
+            else if previousNumber != nil {
+                currentNumber = previousNumber!/100
+                displayText = removeTrailingZeros(number: currentNumber!)
             }
             
         default:
