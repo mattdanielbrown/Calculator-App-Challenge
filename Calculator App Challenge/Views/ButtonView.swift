@@ -44,14 +44,21 @@ struct ButtonView: View {
                 }
                 else {
                     Circle()
-                        .fill(buttonColor)
+                    // Higlight operator if in use
+                        .fill((
+                            ((label == Constants.addition && CalculatorModel.op == Constants.addition)
+                            || (label == Constants.subtraction && CalculatorModel.op == Constants.subtraction)
+                            || (label == Constants.multiplication && CalculatorModel.op == Constants.multiplication)
+                            || (label == Constants.division && CalculatorModel.op == Constants.division))
+                            
+                            && CalculatorModel.currentNumber == nil) ? Color.white : buttonColor)
                         .frame(width: width, height: height)
                 }
                 
                 Text(label)
                     .font(.title)
                     .bold()
-                    .foregroundColor(textColor)
+                    .foregroundColor(label == Constants.addition && CalculatorModel.op == Constants.addition ? buttonColor : textColor)
             }
         }
     }

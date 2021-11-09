@@ -11,11 +11,11 @@ class CalculatorModel: ObservableObject {
     
     @Published var displayText = "0"
     
-    var currentNumber:Double?
+    @Published var currentNumber:Double?
     var previousNumber:Double?
     
     var total:Double = 0
-    var op:String?
+    @Published var op:String?
     
     var decimalPlace = 0
     var decimalFlag = false
