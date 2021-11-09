@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+// Main button
 struct ButtonView: View {
     
     @EnvironmentObject var CalculatorModel: CalculatorModel
@@ -23,6 +24,7 @@ struct ButtonView: View {
         geo.size.width/5
     }
     
+    // For 0 on bottom row
     var longButton = false
     var cornerRadius: CGFloat {
         height/2

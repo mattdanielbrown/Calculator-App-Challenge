@@ -18,6 +18,7 @@ struct HomeView: View {
                 
                 Spacer()
                 
+                // Main total display for calculations
                 Text(CalculatorModel.displayText)
                     .font(.system(size: 60))
                     .minimumScaleFactor(0.5)
@@ -25,7 +26,9 @@ struct HomeView: View {
                     .lineLimit(1)
                     .padding(.bottom)
                     .padding(.trailing, 45)
-                    
+                
+                
+                // Create each row
                 ButtonRow(labels: ["CE", Constants.negation,
                                    Constants.percentage, Constants.division], buttonColors: [Color("Gray"), Color("Gray"), Color("Gray"), Color("Orange")], textColors: [Color("Black"), Color("White"), Color("White"), Color("White")], geo: geo)
                 

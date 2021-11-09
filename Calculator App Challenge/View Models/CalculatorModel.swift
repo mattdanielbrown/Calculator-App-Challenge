@@ -54,13 +54,14 @@ class CalculatorModel: ObservableObject {
         }
     }
     
-    
+    // Represent numbers typed as a string
     func buildNumber (number: String) {
         // No decimal used
         if !decimalFlag {
             currentNumber = (currentNumber ?? 0) * pow(10, 1) + (Double(number)!)
         }
         
+        // Decimal in number, account for location
         else {
             if currentNumber == 0.0 {
                 currentNumber = Double(number)!/10
@@ -71,6 +72,7 @@ class CalculatorModel: ObservableObject {
         }
     }
     
+    // Adds commas, keeps track of decimal rounding, keeps track of trailing 0's
     func formatNumber (number: Double) -> String {
         
         let numberFormatter = NumberFormatter()
@@ -81,9 +83,8 @@ class CalculatorModel: ObservableObject {
         return formattedNumber!
     }
     
-    
+    // Use values to perform specified operation
     func calculate () {
-        
         switch self.op {
             
         case Constants.addition:
@@ -102,11 +103,14 @@ class CalculatorModel: ObservableObject {
             else {
                 total = (previousNumber ?? 0) / currentNumber!
             }
-            
+        
+        // Equals pressed without operator, saves current number into total
         default:
             if currentNumber != nil {
                 total = currentNumber!
             }
+            
+            // If negation has been applied a number, total needs to be updated
             else if previousNumber != nil {
                 total = previousNumber!
             }
@@ -163,22 +167,24 @@ class CalculatorModel: ObservableObject {
             
         case Constants.negation:
             
-            //Before pressing equals
+            //Before pressing equals - negation applies to current number
             if currentNumber != nil {
                 currentNumber!.negate()
                 displayText = formatNumber(number: currentNumber!)
             }
-            //After pressing equals
+            //After pressing equals - negation applies to total
             else if previousNumber != nil {
                 previousNumber!.negate()
                 displayText = formatNumber(number: previousNumber!)
             }
             
         case Constants.percentage:
+            //Before pressing equals - percentage applies to current number
             if currentNumber != nil {
                 currentNumber = currentNumber!/100
                 displayText = formatNumber(number: currentNumber!)
             }
+            //After pressing equals - percentage applies to total
             else if previousNumber != nil {
                 previousNumber = previousNumber!/100
                 displayText = formatNumber(number: previousNumber!)

@@ -17,7 +17,7 @@ struct ButtonRow: View {
         
         HStack {
             Spacer()
-            // Main rows
+            // Main rows of buttons
             if labels.count == 4 {
                 ForEach(0..<labels.count) { index in
                     ButtonView(label: labels[index], buttonColor: buttonColors[index], textColor: textColors[index], geo: geo)
