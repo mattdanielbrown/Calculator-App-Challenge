@@ -35,8 +35,6 @@ class CalculatorModel: ObservableObject {
             }
             
             displayText = formatNumber(number: currentNumber ?? 0)
-            
-            decimalPlace += 1
         }
         
         // Input is an operator
@@ -49,6 +47,10 @@ class CalculatorModel: ObservableObject {
             }
             
             setOp(op: label)
+        }
+        
+        if decimalFlag {
+            decimalPlace += 1
         }
     }
     
@@ -68,13 +70,19 @@ class CalculatorModel: ObservableObject {
     // Adds commas, keeps track of decimal rounding, keeps track of trailing 0's
     func formatNumber (number: Double) -> String {
         
+        // Add commas if number is long enough and strip trailing 0s
         let numberFormatter = NumberFormatter()
         numberFormatter.numberStyle = .decimal
-        numberFormatter.maximumFractionDigits = 6
-        numberFormatter.minimumFractionDigits = decimalPlace
         let formattedNumber = numberFormatter.string(from: NSNumber(value:number))
         
-        return formattedNumber!
+        // Get to correct length after removing trailing 0s
+        let numberFormatter2 = NumberFormatter()
+        numberFormatter2.numberStyle = .decimal
+        let formattedNumber2 = numberFormatter.string(from: NSNumber(value:Double(formattedNumber!)!))
+        numberFormatter2.maximumFractionDigits = 10
+        numberFormatter2.minimumFractionDigits = decimalPlace <= 10 ? decimalPlace : 10
+        
+        return formattedNumber2!
     }
     
     // Use values to perform specified operation
@@ -149,13 +157,12 @@ class CalculatorModel: ObservableObject {
             if !decimalFlag {
                 decimalFlag = true
                 
-                // Nil -> 0.0 with one automatically added decimal place
+                // Nil -> 0.0
                 if currentNumber == nil {
                     currentNumber = 0.0
                     displayText = "0."
-                    decimalPlace += 1
                 }
-                // Number -> Number.
+                // Number -> Number + .
                 else
                 {
                     displayText = displayText + "."
