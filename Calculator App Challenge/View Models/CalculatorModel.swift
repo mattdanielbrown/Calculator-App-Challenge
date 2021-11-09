@@ -70,19 +70,29 @@ class CalculatorModel: ObservableObject {
     // Adds commas, keeps track of decimal rounding, keeps track of trailing 0's
     func formatNumber (number: Double) -> String {
         
-        // Add commas if number is long enough and strip trailing 0s
         let numberFormatter = NumberFormatter()
         numberFormatter.numberStyle = .decimal
-        let formattedNumber = numberFormatter.string(from: NSNumber(value:number))
         
-        // Get to correct length after removing trailing 0s
-        let numberFormatter2 = NumberFormatter()
-        numberFormatter2.numberStyle = .decimal
-        let formattedNumber2 = numberFormatter.string(from: NSNumber(value:Double(formattedNumber!)!))
-        numberFormatter2.maximumFractionDigits = 10
-        numberFormatter2.minimumFractionDigits = decimalPlace <= 10 ? decimalPlace : 10
+        if total == 0 && decimalFlag {
+            //Keep trailing zeros if typing long decimal with no current numbers
+            numberFormatter.maximumFractionDigits = 10
+            numberFormatter.minimumFractionDigits = decimalPlace <= 10 ? decimalPlace : 10
+
+            let formattedNumber = numberFormatter.string(from: NSNumber(value:number))
+            return formattedNumber!
+        }
+        else {
+            // Add commas if number is long enough and strip trailing 0s
+            let formattedNumber = numberFormatter.string(from: NSNumber(value:number))
+            
+            // Get to correct lengt
+            numberFormatter.maximumFractionDigits = 10
+            numberFormatter.minimumFractionDigits = decimalPlace <= 10 ? decimalPlace : 10
+            let formattedNumber2 = numberFormatter.string(from: NSNumber(value:Double(formattedNumber!)!))
+            
+            return formattedNumber2!
+        }
         
-        return formattedNumber2!
     }
     
     // Use values to perform specified operation
@@ -199,3 +209,4 @@ class CalculatorModel: ObservableObject {
         }
     }
 }
+
