@@ -73,7 +73,6 @@ class CalculatorModel: ObservableObject {
         let numberFormatter = NumberFormatter()
         numberFormatter.numberStyle = .decimal
         numberFormatter.maximumFractionDigits = 6
-        numberFormatter.minimumFractionDigits = decimalPlace
         let formattedNumber = numberFormatter.string(from: NSNumber(value:number))
         
         return formattedNumber!
