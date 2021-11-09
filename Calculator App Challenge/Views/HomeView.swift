@@ -20,6 +20,7 @@ struct HomeView: View {
                 
                 Text(CalculatorModel.displayText)
                     .font(.system(size: 60))
+                    .minimumScaleFactor(0.5)
                     .foregroundColor(Color.white)
                     .lineLimit(1)
                     .padding(.bottom)

@@ -34,7 +34,7 @@ class CalculatorModel: ObservableObject {
                 buildNumber(number: label)
             }
             
-            displayText = removeTrailingZeros(number: currentNumber ?? 0)
+            displayText = formatNumber(number: currentNumber ?? 0)
             
             if !decimalFlag {
                 decimalPlace += 1
@@ -47,7 +47,7 @@ class CalculatorModel: ObservableObject {
             // If numbers and operators chained together, update total and display value
             if previousNumber != nil && currentNumber != nil && (label == Constants.addition || label == Constants.subtraction || label == Constants.multiplication || label == Constants.division) {
                 calculate()
-                displayText = removeTrailingZeros(number: total)
+                displayText = formatNumber(number: total)
             }
             
             setOp(op: label)
@@ -71,10 +71,14 @@ class CalculatorModel: ObservableObject {
         }
     }
     
-    func removeTrailingZeros (number: Double) -> String {
-        let text = String(format: "%g", number)
+    func formatNumber (number: Double) -> String {
         
-        return text
+        let numberFormatter = NumberFormatter()
+        numberFormatter.numberStyle = .decimal
+        numberFormatter.maximumFractionDigits = 6
+        let formattedNumber = numberFormatter.string(from: NSNumber(value:number))
+        
+        return formattedNumber!
     }
     
     
@@ -106,7 +110,7 @@ class CalculatorModel: ObservableObject {
             else if previousNumber != nil {
                 total = previousNumber!
             }
-            displayText = removeTrailingZeros(number: total)
+            displayText = formatNumber(number: total)
         }
         
         self.op = nil
@@ -141,7 +145,7 @@ class CalculatorModel: ObservableObject {
             
         case Constants.equals:
             calculate()
-            displayText = removeTrailingZeros(number: total)
+            displayText = formatNumber(number: total)
             
         case ".":
             if !decimalFlag {
@@ -162,23 +166,22 @@ class CalculatorModel: ObservableObject {
             //Before pressing equals
             if currentNumber != nil {
                 currentNumber!.negate()
-                displayText = removeTrailingZeros(number: currentNumber!)
+                displayText = formatNumber(number: currentNumber!)
             }
             //After pressing equals
             else if previousNumber != nil {
                 previousNumber!.negate()
-                displayText = removeTrailingZeros(number: previousNumber!)
+                displayText = formatNumber(number: previousNumber!)
             }
-            
             
         case Constants.percentage:
             if currentNumber != nil {
                 currentNumber = currentNumber!/100
-                displayText = removeTrailingZeros(number: currentNumber!)
+                displayText = formatNumber(number: currentNumber!)
             }
             else if previousNumber != nil {
-                currentNumber = previousNumber!/100
-                displayText = removeTrailingZeros(number: currentNumber!)
+                previousNumber = previousNumber!/100
+                displayText = formatNumber(number: previousNumber!)
             }
             
         default:
