@@ -36,10 +36,9 @@ class CalculatorModel: ObservableObject {
             
             displayText = formatNumber(number: currentNumber ?? 0)
             
-            if !decimalFlag {
-                decimalPlace += 1
-            }
+            decimalPlace += 1
         }
+        
         
         // Input is an operator
         else {
@@ -63,12 +62,8 @@ class CalculatorModel: ObservableObject {
         
         // Decimal in number, account for location
         else {
-            if currentNumber == 0.0 {
-                currentNumber = Double(number)!/10
-            }
-            else {
-                currentNumber = (currentNumber ?? 0) + (Double(number)! / (pow(10, Double(decimalPlace))))
-            }
+            
+            currentNumber = (currentNumber ?? 0) + (Double(number)! / (pow(10, Double(decimalPlace))))
         }
     }
     
@@ -78,6 +73,7 @@ class CalculatorModel: ObservableObject {
         let numberFormatter = NumberFormatter()
         numberFormatter.numberStyle = .decimal
         numberFormatter.maximumFractionDigits = 6
+        numberFormatter.minimumFractionDigits = decimalPlace
         let formattedNumber = numberFormatter.string(from: NSNumber(value:number))
         
         return formattedNumber!
@@ -92,10 +88,10 @@ class CalculatorModel: ObservableObject {
             
         case Constants.subtraction:
             total = (previousNumber ?? 0) - (currentNumber ?? 0)
-
+            
         case Constants.multiplication:
             total = (previousNumber ?? 0) * (currentNumber ?? 0)
-
+            
         case Constants.division:
             if currentNumber == 0 {
                 displayText = "Error"
@@ -103,8 +99,8 @@ class CalculatorModel: ObservableObject {
             else {
                 total = (previousNumber ?? 0) / currentNumber!
             }
-        
-        // Equals pressed without operator, saves current number into total
+            
+            // Equals pressed without operator, saves current number into total
         default:
             if currentNumber != nil {
                 total = currentNumber!
@@ -158,6 +154,7 @@ class CalculatorModel: ObservableObject {
                 if currentNumber == nil {
                     currentNumber = 0.0
                     displayText = "0."
+                    decimalPlace += 1
                 }
                 else
                 {
@@ -195,4 +192,3 @@ class CalculatorModel: ObservableObject {
         }
     }
 }
-
