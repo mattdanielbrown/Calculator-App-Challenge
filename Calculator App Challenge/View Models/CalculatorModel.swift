@@ -39,7 +39,6 @@ class CalculatorModel: ObservableObject {
             decimalPlace += 1
         }
         
-        
         // Input is an operator
         else {
             
@@ -62,7 +61,6 @@ class CalculatorModel: ObservableObject {
         
         // Decimal in number, account for location
         else {
-            
             currentNumber = (currentNumber ?? 0) + (Double(number)! / (pow(10, Double(decimalPlace))))
         }
     }
@@ -150,11 +148,13 @@ class CalculatorModel: ObservableObject {
             if !decimalFlag {
                 decimalFlag = true
                 
+                // Nil -> 0.0 with one automatically added decimal place
                 if currentNumber == nil {
                     currentNumber = 0.0
                     displayText = "0."
                     decimalPlace += 1
                 }
+                // Number -> Number.
                 else
                 {
                     displayText = displayText + "."
