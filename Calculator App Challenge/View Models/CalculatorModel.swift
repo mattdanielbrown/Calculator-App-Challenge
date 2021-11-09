@@ -73,26 +73,17 @@ class CalculatorModel: ObservableObject {
         let numberFormatter = NumberFormatter()
         numberFormatter.numberStyle = .decimal
         
-        if total == 0 && decimalFlag {
+        if currentNumber == 0 && decimalFlag {
             //Keep trailing zeros if typing long decimal with no current numbers
             numberFormatter.maximumFractionDigits = 10
             numberFormatter.minimumFractionDigits = decimalPlace <= 10 ? decimalPlace : 10
-
-            let formattedNumber = numberFormatter.string(from: NSNumber(value:number))
-            return formattedNumber!
         }
         else {
             // Add commas if number is long enough and strip trailing 0s
-            let formattedNumber = numberFormatter.string(from: NSNumber(value:number))
-            
-            // Get to correct lengt
             numberFormatter.maximumFractionDigits = 10
-            numberFormatter.minimumFractionDigits = decimalPlace <= 10 ? decimalPlace : 10
-            let formattedNumber2 = numberFormatter.string(from: NSNumber(value:Double(formattedNumber!)!))
-            
-            return formattedNumber2!
         }
         
+        return numberFormatter.string(from: NSNumber(value:number))!
     }
     
     // Use values to perform specified operation
