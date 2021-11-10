@@ -167,12 +167,22 @@ class CalculatorModel: ObservableObject {
                 // Nil -> 0.0
                 if currentNumber == nil {
                     currentNumber = 0.0
-                    displayText = "0."
+                    if negated {
+                        displayText = "-0."
+                    }
+                    else {
+                        displayText = "0."
+                    }
                 }
                 // Number -> Number + .
                 else
                 {
-                    displayText = displayText + "."
+                    if negated {
+                        displayText = "-" + displayText + "."
+                    }
+                    else {
+                        displayText = displayText + "."
+                    }
                 }
             }
             
@@ -193,7 +203,12 @@ class CalculatorModel: ObservableObject {
             
             // No numbers have been inputted
             else {
-                displayText = "-0"
+                if negated {
+                    displayText = "-0"
+                }
+                else {
+                    displayText = "0"
+                }
             }
             
         case Constants.percentage:
