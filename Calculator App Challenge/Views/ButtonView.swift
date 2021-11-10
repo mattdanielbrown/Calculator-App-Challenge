@@ -48,11 +48,13 @@ struct ButtonView: View {
                     Circle()
                     // Higlight operator white if in use
                         .fill((
+                            // Operator and button are either +, -, *, or /
                             ((label == Constants.addition && CalculatorModel.op == Constants.addition)
-                            || (label == Constants.subtraction && CalculatorModel.op == Constants.subtraction)
-                            || (label == Constants.multiplication && CalculatorModel.op == Constants.multiplication)
-                            || (label == Constants.division && CalculatorModel.op == Constants.division))
+                             || (label == Constants.subtraction && CalculatorModel.op == Constants.subtraction)
+                             || (label == Constants.multiplication && CalculatorModel.op == Constants.multiplication)
+                             || (label == Constants.division && CalculatorModel.op == Constants.division))
                             
+                            // No new numbers after operator
                             && CalculatorModel.currentNumber == nil) ? Color.white : buttonColor)
                         .frame(width: width, height: height)
                 }
@@ -60,13 +62,15 @@ struct ButtonView: View {
                 Text(label)
                     .font(.title)
                     .bold()
-                    // Switch text color to button color if button highlighted
+                // Switch text color to button color if button highlighted
                     .foregroundColor((
+                        // Operator and button are either +, -, *, or /
                         ((label == Constants.addition && CalculatorModel.op == Constants.addition)
-                        || (label == Constants.subtraction && CalculatorModel.op == Constants.subtraction)
-                        || (label == Constants.multiplication && CalculatorModel.op == Constants.multiplication)
-                        || (label == Constants.division && CalculatorModel.op == Constants.division))
+                         || (label == Constants.subtraction && CalculatorModel.op == Constants.subtraction)
+                         || (label == Constants.multiplication && CalculatorModel.op == Constants.multiplication)
+                         || (label == Constants.division && CalculatorModel.op == Constants.division))
                         
+                        // No new numbers after operator
                         && CalculatorModel.currentNumber == nil) ? buttonColor : textColor)
             }
         }

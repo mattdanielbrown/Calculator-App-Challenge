@@ -72,7 +72,7 @@ class CalculatorModel: ObservableObject {
         }
     }
     
-    // Adds commas, keeps track of decimal rounding, keeps track of trailing 0's
+    // Improves a number's asthetic for a calculator
     func formatNumber (number: Double) -> String {
         
         let numberFormatter = NumberFormatter()
@@ -80,7 +80,7 @@ class CalculatorModel: ObservableObject {
         // Adds commas if number is long enough
         numberFormatter.numberStyle = .decimal
         
-        // Special case for if user types something such as 0.0, .00, .000, etc. because trailing 0s are needed here
+        // Special case for if user types something such as 0.0, .00, .000, etc. where trailing 0s are needed
         if currentNumber == 0 && decimalFlag {
             //Keep trailing zeros if typing long decimal with no current numbers
             numberFormatter.maximumFractionDigits = 10
@@ -114,19 +114,16 @@ class CalculatorModel: ObservableObject {
                 total = (previousNumber ?? 0) / (currentNumber ?? 1)
             }
             
-            // Equals pressed without operator, saves current number into total
+            // Calculating without operator (negation, equals, percent), applies current number into total
         default:
             if currentNumber != nil {
                 total = currentNumber!
             }
             
-            // If negation has been applied a number, total needs to be updated
-            else if previousNumber != nil {
-                total = previousNumber!
-            }
             displayText = formatNumber(number: total)
         }
         
+        // Reset for next number
         self.op = nil
         previousNumber = total
         currentNumber = nil
@@ -137,32 +134,27 @@ class CalculatorModel: ObservableObject {
             
         case Constants.addition, Constants.subtraction, Constants.multiplication, Constants.division:
             self.op = op
+            
+            // Reset for next number
             decimalPlace = 0
             decimalFlag = false
             
-            if previousNumber == nil {
-                previousNumber = 0
-            }
-            
-            previousNumber! += Double(currentNumber ?? 0)
-            
+            // Transfer number before operator to previous number and get ready for next number
+            previousNumber = (previousNumber ?? 0) + (currentNumber ?? 0)
             currentNumber = nil
             
         case "CE":
-            self.op = nil
-            previousNumber = nil
-            currentNumber = nil
-            total = 0
-            decimalFlag = false
-            decimalPlace = 0
-            displayText = "0"
+            clearCalculator()
             
         case Constants.equals:
             calculate()
             displayText = formatNumber(number: total)
             
         case ".":
+            
+            // Only allow 1 decimal to be adder per number; have to update display here with concatination and actually account for decimal in the currentNumber (double) in numberBuilder() after decimal flag has been set
             if !decimalFlag {
+                
                 decimalFlag = true
                 
                 // Nil -> 0.0
@@ -205,6 +197,16 @@ class CalculatorModel: ObservableObject {
         default:
             break
         }
+    }
+    
+    func clearCalculator () {
+        self.op = nil
+        previousNumber = nil
+        currentNumber = nil
+        total = 0
+        decimalFlag = false
+        decimalPlace = 0
+        displayText = "0"
     }
 }
 
