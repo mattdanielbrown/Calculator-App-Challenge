@@ -11,18 +11,21 @@ class CalculatorModel: ObservableObject {
     
     @Published var displayText = "0"
     
+    // Published so ButtonView knows to stop highlighting an operator when a number is being typed
     @Published var currentNumber:Double?
     var previousNumber:Double?
     
     var total:Double = 0
+    // Published so ButtonView knows to stop highlighting an operator when a number is being typed
     @Published var op:String?
     
     var decimalPlace = 0
     var decimalFlag = false
     
+    // Called each time any input is received
     func buttonPressed (label: String) {
         
-        // Input is a number, display appropriately
+        // Input is a number
         if Double(label) != nil {
             
             // Building first number
@@ -34,13 +37,14 @@ class CalculatorModel: ObservableObject {
                 buildNumber(number: label)
             }
             
-            displayText = formatNumber(number: currentNumber ?? 0)
+            // Display updated input after formatting (current number is always what is being typed, current switches to previous after an operator)
+            displayText = formatNumber(number: currentNumber!)
         }
         
         // Input is an operator
         else {
             
-            // If numbers and operators chained together, update total and display value
+            // If numbers and operators chained together, update total and display formatted value before pressing equals
             if previousNumber != nil && currentNumber != nil && (label == Constants.addition || label == Constants.subtraction || label == Constants.multiplication || label == Constants.division) {
                 calculate()
                 displayText = formatNumber(number: total)
@@ -49,19 +53,20 @@ class CalculatorModel: ObservableObject {
             setOp(op: label)
         }
         
+        // Start counting decimal places if operator was a decimal
         if decimalFlag {
             decimalPlace += 1
         }
     }
     
-    // Represent numbers typed as a string
+    // Logic to turn string input into number
     func buildNumber (number: String) {
-        // No decimal used
+        // No decimal used, number will increase by a power of 10 each time (1, 1x, 1xx)
         if !decimalFlag {
             currentNumber = (currentNumber ?? 0) * pow(10, 1) + (Double(number)!)
         }
         
-        // Decimal in number, account for location
+        // Decimal used, decimal power will increase making the increment amount decrease by a power of 10 each time (1, 1.x, 1.xx)
         else {
             currentNumber = (currentNumber ?? 0) + (Double(number)! / (pow(10, Double(decimalPlace))))
         }
@@ -71,15 +76,17 @@ class CalculatorModel: ObservableObject {
     func formatNumber (number: Double) -> String {
         
         let numberFormatter = NumberFormatter()
+        
+        // Adds commas if number is long enough
         numberFormatter.numberStyle = .decimal
         
+        // Special case for if user types something such as 0.0, .00, .000, etc. because trailing 0s are needed here
         if currentNumber == 0 && decimalFlag {
             //Keep trailing zeros if typing long decimal with no current numbers
             numberFormatter.maximumFractionDigits = 10
             numberFormatter.minimumFractionDigits = decimalPlace <= 10 ? decimalPlace : 10
         }
         else {
-            // Add commas if number is long enough and strip trailing 0s
             numberFormatter.maximumFractionDigits = 10
         }
         
@@ -97,14 +104,14 @@ class CalculatorModel: ObservableObject {
             total = (previousNumber ?? 0) - (currentNumber ?? 0)
             
         case Constants.multiplication:
-            total = (previousNumber ?? 0) * (currentNumber ?? 0)
+            total = (previousNumber ?? 0) * (currentNumber ?? 1)
             
         case Constants.division:
             if currentNumber == 0 {
                 displayText = "Error"
             }
             else {
-                total = (previousNumber ?? 0) / currentNumber!
+                total = (previousNumber ?? 0) / (currentNumber ?? 1)
             }
             
             // Equals pressed without operator, saves current number into total

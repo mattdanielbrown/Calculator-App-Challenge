@@ -16,7 +16,7 @@ struct ButtonView: View {
     let buttonColor: Color
     var textColor = Color("White")
     
-    var geo: GeometryProxy
+    let geo: GeometryProxy
     var width: CGFloat {
         geo.size.width/5
     }
@@ -32,7 +32,9 @@ struct ButtonView: View {
 
     var body: some View {
         Button {
+            
             CalculatorModel.buttonPressed(label: self.label)
+            
         } label: {
             ZStack {
                 
@@ -44,7 +46,7 @@ struct ButtonView: View {
                 }
                 else {
                     Circle()
-                    // Higlight operator if in use
+                    // Higlight operator white if in use
                         .fill((
                             ((label == Constants.addition && CalculatorModel.op == Constants.addition)
                             || (label == Constants.subtraction && CalculatorModel.op == Constants.subtraction)
@@ -58,6 +60,7 @@ struct ButtonView: View {
                 Text(label)
                     .font(.title)
                     .bold()
+                    // Switch text color to button color if button highlighted
                     .foregroundColor((
                         ((label == Constants.addition && CalculatorModel.op == Constants.addition)
                         || (label == Constants.subtraction && CalculatorModel.op == Constants.subtraction)

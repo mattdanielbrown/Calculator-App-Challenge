@@ -8,9 +8,11 @@
 import SwiftUI
 
 struct ButtonRow: View {
+    
     var labels: [String]
     var buttonColors: [Color] = [Color("DarkGray"), Color("DarkGray"), Color("DarkGray"), Color("Orange")]
     var textColors: [Color] = [Color("White"), Color("White"), Color("White"), Color("White")]
+    
     var geo: GeometryProxy
     
     var body: some View {
@@ -35,7 +37,7 @@ struct ButtonRow: View {
             
             // Error
             else {
-                Text("Error")
+                Text("Error creating row")
             }
             
             Spacer()

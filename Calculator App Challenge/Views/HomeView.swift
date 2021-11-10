@@ -25,8 +25,7 @@ struct HomeView: View {
                     .foregroundColor(Color.white)
                     .lineLimit(1)
                     .padding(.bottom)
-                    .padding(.trailing, 45)
-                
+                    .padding(.trailing, geo.size.width/8)
                 
                 // Create each row
                 ButtonRow(labels: ["CE", Constants.negation,
@@ -40,7 +39,7 @@ struct HomeView: View {
                 
                 ButtonRow(labels: ["0", ".", Constants.equals], geo: geo)
             }
-            .frame(width: geo.size.width)
+            .frame(alignment: .center)
             .padding(.bottom)
         }
         .background(Color("Black"))
