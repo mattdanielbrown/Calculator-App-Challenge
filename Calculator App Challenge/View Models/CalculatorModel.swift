@@ -22,6 +22,8 @@ class CalculatorModel: ObservableObject {
     var decimalPlace = 0
     var decimalFlag = false
     
+    var negated = false
+    
     // Called each time any input is received
     func buttonPressed (label: String) {
         
@@ -54,7 +56,7 @@ class CalculatorModel: ObservableObject {
         }
         
         // Start counting decimal places if operator was a decimal
-        if decimalFlag {
+        if decimalFlag && ((label != Constants.negation) && label != Constants.percentage) {
             decimalPlace += 1
         }
     }
@@ -69,6 +71,10 @@ class CalculatorModel: ObservableObject {
         // Decimal used, decimal power will increase making the increment amount decrease by a power of 10 each time (1, 1.x, 1.xx)
         else {
             currentNumber = (currentNumber ?? 0) + (Double(number)! / (pow(10, Double(decimalPlace))))
+        }
+        
+        if negated {
+            currentNumber?.negate()
         }
     }
     
@@ -138,6 +144,7 @@ class CalculatorModel: ObservableObject {
             // Reset for next number
             decimalPlace = 0
             decimalFlag = false
+            negated = false
             
             // Transfer number before operator to previous number and get ready for next number
             previousNumber = (previousNumber ?? 0) + (currentNumber ?? 0)
@@ -152,7 +159,7 @@ class CalculatorModel: ObservableObject {
             
         case ".":
             
-            // Only allow 1 decimal to be adder per number; have to update display here with concatination and actually account for decimal in the currentNumber (double) in numberBuilder() after decimal flag has been set
+            // Only allow 1 decimal to be adder per number; have to update display here with concatination and actually account for decimal in the currentNumber (double) in buildNumber() after decimal flag has been set
             if !decimalFlag {
                 
                 decimalFlag = true
@@ -171,15 +178,22 @@ class CalculatorModel: ObservableObject {
             
         case Constants.negation:
             
-            //Before pressing equals - negation applies to current number
+            negated.toggle()
+                        
+            // Before pressing equals - negation applies to current number
             if currentNumber != nil {
                 currentNumber!.negate()
                 displayText = formatNumber(number: currentNumber!)
             }
-            //After pressing equals - negation applies to total
+            // After pressing equals - negation applies to total
             else if previousNumber != nil {
                 previousNumber!.negate()
                 displayText = formatNumber(number: previousNumber!)
+            }
+            
+            // No numbers have been inputted
+            else {
+                displayText = "-0"
             }
             
         case Constants.percentage:
@@ -199,6 +213,7 @@ class CalculatorModel: ObservableObject {
         }
     }
     
+    // Reset all properties
     func clearCalculator () {
         self.op = nil
         previousNumber = nil
@@ -207,6 +222,7 @@ class CalculatorModel: ObservableObject {
         decimalFlag = false
         decimalPlace = 0
         displayText = "0"
+        negated = false
     }
 }
 
