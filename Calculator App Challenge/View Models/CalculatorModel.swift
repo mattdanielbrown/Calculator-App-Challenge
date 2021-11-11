@@ -189,7 +189,7 @@ class CalculatorModel: ObservableObject {
         case Constants.negation:
             
             negated.toggle()
-                        
+            
             // Before pressing equals or an operator - negation applies to current number
             if currentNumber != nil {
                 currentNumber!.negate()
@@ -200,14 +200,7 @@ class CalculatorModel: ObservableObject {
             else if previousNumber != nil {
                 // Have not typed a number after pressing an operator
                 if currentNumber == nil {
-                    if negated {
-                        displayText = "-0"
-                    }
-                    else {
-                        displayText = "0"
-                    }
-                }
-                else {
+                    
                     previousNumber!.negate()
                     displayText = formatNumber(number: previousNumber!)
                 }
