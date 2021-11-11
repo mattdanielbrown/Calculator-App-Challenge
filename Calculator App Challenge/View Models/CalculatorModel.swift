@@ -25,6 +25,8 @@ class CalculatorModel: ObservableObject {
     var negated = false
     var errorFlag = false
     
+    var updatingFlag = false
+    
     // Called each time any input is received
     func buttonPressed (label: String) {
         
@@ -55,8 +57,10 @@ class CalculatorModel: ObservableObject {
             
             // If numbers and operators chained together, update total and display formatted value before pressing equals
             if previousNumber != nil && currentNumber != nil && (label == Constants.addition || label == Constants.subtraction || label == Constants.multiplication || label == Constants.division) {
+                updatingFlag = true
                 calculate()
                 displayText = formatNumber(number: total)
+                updatingFlag = false
             }
             
             setOp(op: label)
@@ -107,16 +111,11 @@ class CalculatorModel: ObservableObject {
         numberFormatter.numberStyle = .decimal
         
         // Special case for if user types something such as 0.0, .00, .000, etc. where trailing 0s are needed
-        if currentNumber == 0 && decimalFlag {
+        if (currentNumber == 0 && decimalFlag) || !updatingFlag {
             //Keep trailing zeros if typing long decimal with no current numbers
-            numberFormatter.maximumFractionDigits = 10
             numberFormatter.minimumFractionDigits = decimalPlace <= 10 ? decimalPlace : 10
         }
-        else {
-            numberFormatter.maximumFractionDigits = 10
-            numberFormatter.minimumFractionDigits = decimalPlace <= 10 ? decimalPlace : 10
-            
-        }
+        numberFormatter.maximumFractionDigits = 10
         
         return numberFormatter.string(from: NSNumber(value:number))!
     }
