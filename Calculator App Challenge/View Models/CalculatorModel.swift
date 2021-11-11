@@ -23,6 +23,7 @@ class CalculatorModel: ObservableObject {
     var decimalFlag = false
     
     var negated = false
+    var errorFlag = false
     
     // Called each time any input is received
     func buttonPressed (label: String) {
@@ -41,6 +42,12 @@ class CalculatorModel: ObservableObject {
             
             // Display updated input after formatting (current number is always what is being typed, current switches to previous after an operator)
             displayText = formatNumber(number: currentNumber!)
+            
+            
+            // Continue counting decimals
+            if decimalFlag {
+                decimalPlace += 1
+            }
         }
         
         // Input is an operator
@@ -53,12 +60,14 @@ class CalculatorModel: ObservableObject {
             }
             
             setOp(op: label)
+            
+            // Start counting decimal places if operator was a decimal
+            if decimalFlag && ((label != Constants.negation) && label != Constants.percentage) {
+                decimalPlace += 1
+            }
         }
         
-        // Start counting decimal places if operator was a decimal
-        if decimalFlag && ((label != Constants.negation) && label != Constants.percentage) {
-            decimalPlace += 1
-        }
+        
     }
     
     // Logic to turn string input into number
@@ -70,7 +79,6 @@ class CalculatorModel: ObservableObject {
             if !decimalFlag {
                 currentNumber = (currentNumber ?? 0) * pow(10, 1) + (Double(number)!)
             }
-            
             // Decimal used, decimal power will increase making the increment amount decrease by a power of 10 each time (1, 1.x, 1.xx)
             else {
                 currentNumber = (currentNumber ?? 0) + (Double(number)! / (pow(10, Double(decimalPlace))))
@@ -83,7 +91,6 @@ class CalculatorModel: ObservableObject {
             if !decimalFlag {
                 currentNumber = (currentNumber ?? 0) * pow(10, 1) - (Double(number)!)
             }
-            
             // Decimal used, decimal power will decrease making the increment amount decrease by a power of 10 each time (1, 1.x, 1.xx)
             else {
                 currentNumber = (currentNumber ?? 0) - (Double(number)! / (pow(10, Double(decimalPlace))))
@@ -107,6 +114,8 @@ class CalculatorModel: ObservableObject {
         }
         else {
             numberFormatter.maximumFractionDigits = 10
+            numberFormatter.minimumFractionDigits = decimalPlace <= 10 ? decimalPlace : 10
+            
         }
         
         return numberFormatter.string(from: NSNumber(value:number))!
@@ -117,20 +126,20 @@ class CalculatorModel: ObservableObject {
         switch self.op {
             
         case Constants.addition:
-            total = (previousNumber ?? 0) + (currentNumber ?? 0)
+            total = (previousNumber!) + (currentNumber ?? 0)
             
         case Constants.subtraction:
-            total = (previousNumber ?? 0) - (currentNumber ?? 0)
+            total = (previousNumber!) - (currentNumber ?? 0)
             
         case Constants.multiplication:
-            total = (previousNumber ?? 0) * (currentNumber ?? 1)
+            total = (previousNumber!) * (currentNumber ?? 1)
             
         case Constants.division:
-            if currentNumber == 0 {
-                displayText = "Error"
+            if currentNumber == 0.0 {
+                errorFlag = true
             }
             else {
-                total = (previousNumber ?? 0) / (currentNumber ?? 1)
+                total = (previousNumber!) / (currentNumber ?? 1)
             }
             
             // Calculating without operator (negation, equals, percent), applies current number into total
@@ -139,7 +148,7 @@ class CalculatorModel: ObservableObject {
                 total = currentNumber!
             }
             else {
-                total = previousNumber!
+                total = previousNumber ?? 0
             }
             
             displayText = formatNumber(number: total)
@@ -171,7 +180,14 @@ class CalculatorModel: ObservableObject {
             
         case Constants.equals:
             calculate()
-            displayText = formatNumber(number: total)
+            decimalPlace = 0
+            
+            if errorFlag {
+                displayText = "Error"
+            }
+            else {
+                displayText = formatNumber(number: total)
+            }
             
         case ".":
             
@@ -193,8 +209,8 @@ class CalculatorModel: ObservableObject {
                 // Number -> Number + .
                 else
                 {
-                    if negated {
-                        displayText = "-" + displayText + "."
+                    if currentNumber == 0 {
+                        displayText = "0."
                     }
                     else {
                         displayText = displayText + "."
@@ -208,18 +224,51 @@ class CalculatorModel: ObservableObject {
             
             // Before pressing equals or an operator
             if currentNumber != nil {
-                currentNumber?.negate()
-                displayText = formatNumber(number: currentNumber!)
+                if currentNumber == 0 {
+                    if negated {
+                        displayText = "-0"
+                    }
+                    else {
+                        displayText = "0"
+                    }
+                }
+                // Apply to currently displayed number
+                else {
+                    currentNumber?.negate()
+                    displayText = formatNumber(number: currentNumber!)
+                }
             }
             
-            // After pressing equals or an operator
             else {
-                total.negate()
-                displayText = formatNumber(number: total)
+                // Current number is nil and total is 0
+                if total == 0  {
+                    if negated {
+                        displayText = "-0"
+                    }
+                    else {
+                        displayText = "0"
+                    }
+                }
+                else {
+                    // Apply to next number (that will be typed) which is nil
+                    if self.op != nil {
+                        if negated {
+                            displayText = "-0"
+                        }
+                        else {
+                            displayText = "0"
+                        }
+                    }
+                    else {
+                        previousNumber?.negate()
+                        displayText = formatNumber(number: previousNumber!)
+                    }
+                    
+                }
             }
             
             // No numbers have been inputted
-            if previousNumber == nil && currentNumber == nil {
+            if currentNumber == 0 {
                 if negated {
                     displayText = "-0"
                 }
@@ -230,6 +279,7 @@ class CalculatorModel: ObservableObject {
                     displayText += "."
                 }
             }
+            
             
         case Constants.percentage:
             //Before pressing equals - percentage applies to current number
@@ -258,6 +308,6 @@ class CalculatorModel: ObservableObject {
         decimalPlace = 0
         displayText = "0"
         negated = false
+        errorFlag = false
     }
 }
-
