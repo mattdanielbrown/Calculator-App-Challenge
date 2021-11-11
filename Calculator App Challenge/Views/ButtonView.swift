@@ -11,6 +11,7 @@ import SwiftUI
 struct ButtonView: View {
     
     @EnvironmentObject var CalculatorModel: CalculatorModel
+    @Environment(\.colorScheme) var currentMode
 
     let label: String
     let buttonColor: Color
@@ -55,7 +56,7 @@ struct ButtonView: View {
                              || (label == Constants.division && CalculatorModel.op == Constants.division))
                             
                             // No new numbers after operator
-                            && CalculatorModel.currentNumber == nil) ? Color.white : buttonColor)
+                            && CalculatorModel.currentNumber == nil) ? (currentMode == .dark ? Color.white : Color.black) : buttonColor)
                         .frame(width: width, height: height)
                 }
                 
