@@ -13,9 +13,11 @@ class CalculatorModel: ObservableObject {
     
     // Published so ButtonView knows to stop highlighting an operator when a number is being typed
     @Published var currentNumber:Double?
+    
     var previousNumber:Double?
     
     var total:Double = 0
+    
     // Published so ButtonView knows to stop highlighting an operator when a number is being typed
     @Published var op:String?
     
@@ -25,6 +27,7 @@ class CalculatorModel: ObservableObject {
     var negated = false
     var errorFlag = false
     
+    // Flag for when number is updating during operations chained together (only want trailing 0s that are specifically typed)
     var updatingFlag = false
     
     // Called each time any input is received
@@ -43,8 +46,15 @@ class CalculatorModel: ObservableObject {
             }
             
             // Display updated input after formatting (current number is always what is being typed, current switches to previous after an operator)
-            displayText = formatNumber(number: currentNumber!)
-            
+            if currentNumber == 0 && negated && !decimalFlag {
+                displayText = "-0"
+            }
+            else if currentNumber == 0 && !negated && !decimalFlag {
+                displayText = "0"
+            }
+            else {
+                displayText = formatNumber(number: currentNumber!)
+            }
             
             // Continue counting decimals
             if decimalFlag {
@@ -70,8 +80,6 @@ class CalculatorModel: ObservableObject {
                 decimalPlace += 1
             }
         }
-        
-        
     }
     
     // Logic to turn string input into number
