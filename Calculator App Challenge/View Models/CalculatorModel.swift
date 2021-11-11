@@ -63,18 +63,31 @@ class CalculatorModel: ObservableObject {
     
     // Logic to turn string input into number
     func buildNumber (number: String) {
-        // No decimal used, number will increase by a power of 10 each time (1, 1x, 1xx)
-        if !decimalFlag {
-            currentNumber = (currentNumber ?? 0) * pow(10, 1) + (Double(number)!)
+        
+        // Not dealing with negatives
+        if !negated {
+            // No decimal used, number will increase by a power of 10 each time (1, 1x, 1xx)
+            if !decimalFlag {
+                currentNumber = (currentNumber ?? 0) * pow(10, 1) + (Double(number)!)
+            }
+            
+            // Decimal used, decimal power will increase making the increment amount decrease by a power of 10 each time (1, 1.x, 1.xx)
+            else {
+                currentNumber = (currentNumber ?? 0) + (Double(number)! / (pow(10, Double(decimalPlace))))
+            }
         }
         
-        // Decimal used, decimal power will increase making the increment amount decrease by a power of 10 each time (1, 1.x, 1.xx)
+        // Dealing with negatives
         else {
-            currentNumber = (currentNumber ?? 0) + (Double(number)! / (pow(10, Double(decimalPlace))))
-        }
-        
-        if negated {
-            currentNumber?.negate()
+            // No decimal used, number will decrease by a power of 10 each time (1, 1x, 1xx)
+            if !decimalFlag {
+                currentNumber = (currentNumber ?? 0) * pow(10, 1) - (Double(number)!)
+            }
+            
+            // Decimal used, decimal power will decrease making the increment amount decrease by a power of 10 each time (1, 1.x, 1.xx)
+            else {
+                currentNumber = (currentNumber ?? 0) - (Double(number)! / (pow(10, Double(decimalPlace))))
+            }
         }
     }
     
@@ -124,6 +137,9 @@ class CalculatorModel: ObservableObject {
         default:
             if currentNumber != nil {
                 total = currentNumber!
+            }
+            else {
+                total = previousNumber!
             }
             
             displayText = formatNumber(number: total)
@@ -190,29 +206,28 @@ class CalculatorModel: ObservableObject {
             
             negated.toggle()
             
-            // Before pressing equals or an operator - negation applies to current number
+            // Before pressing equals or an operator
             if currentNumber != nil {
-                currentNumber!.negate()
+                currentNumber?.negate()
                 displayText = formatNumber(number: currentNumber!)
             }
             
-            // After pressing equals or an operator - negation applies to previous number
-            else if previousNumber != nil {
-                // Have not typed a number after pressing an operator
-                if currentNumber == nil {
-                    
-                    previousNumber!.negate()
-                    displayText = formatNumber(number: previousNumber!)
-                }
+            // After pressing equals or an operator
+            else {
+                total.negate()
+                displayText = formatNumber(number: total)
             }
             
             // No numbers have been inputted
-            else {
+            if previousNumber == nil && currentNumber == nil {
                 if negated {
                     displayText = "-0"
                 }
                 else {
                     displayText = "0"
+                }
+                if decimalFlag {
+                    displayText += "."
                 }
             }
             
