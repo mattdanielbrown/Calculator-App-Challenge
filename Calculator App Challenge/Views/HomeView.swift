@@ -10,6 +10,7 @@ import SwiftUI
 struct HomeView: View {
     
     @EnvironmentObject var CalculatorModel: CalculatorModel
+    @Environment(\.colorScheme) var currentMode
     
     var body: some View {
         GeometryReader { geo in
@@ -22,7 +23,7 @@ struct HomeView: View {
                 Text(CalculatorModel.displayText)
                     .font(.system(size: 60))
                     .minimumScaleFactor(0.5)
-                    .foregroundColor(Color.white)
+                    .foregroundColor(currentMode == .dark ? Color.white : Color.black)
                     .lineLimit(1)
                     .padding(.bottom)
                     .padding(.trailing, geo.size.width/8)
