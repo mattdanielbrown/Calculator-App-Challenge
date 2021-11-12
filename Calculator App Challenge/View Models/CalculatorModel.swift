@@ -228,6 +228,7 @@ class CalculatorModel: ObservableObject {
         case Constants.negation:
             
             negated.toggle()
+            updatingFlag = true
             
             // Before pressing equals or an operator
             if currentNumber != nil {
@@ -286,6 +287,8 @@ class CalculatorModel: ObservableObject {
                     displayText += "."
                 }
             }
+            
+            updatingFlag = false
             
             
         case Constants.percentage:
