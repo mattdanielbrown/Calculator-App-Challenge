@@ -81,7 +81,8 @@ struct ButtonView: View {
 struct ButtonView_Previews: PreviewProvider {
     static var previews: some View {
         GeometryReader { geo in
-            ButtonView(label: "0", buttonColor: Color("Gray"), geo: geo, longButton: false)
+            ButtonView(label: "0", buttonColor: Color("Gray"), geo: geo, longButton: false)            .environmentObject(CalculatorModel())
+
         }
     }
 }

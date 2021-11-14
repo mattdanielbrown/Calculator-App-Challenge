@@ -48,7 +48,7 @@ struct ButtonRow: View {
 struct ButtonRow_Previews: PreviewProvider {
     static var previews: some View {
         GeometryReader { geo in
-            ButtonRow(labels: ["1", "3", String("\u{00d7}")], geo: geo)
+            ButtonRow(labels: ["1", "3", String("\u{00d7}")], geo: geo)            .environmentObject(CalculatorModel())
         }
     }
 }
