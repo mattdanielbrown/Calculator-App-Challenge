@@ -1,4 +1,4 @@
-# Calculator-App-Challenge
+# Calculator-App
 Remake of iOS default calculator
 
 <img src="https://github.com/Elichartnett/Calculator-App-Challenge/blob/main/Calculator-App%201.png" alt="1" width="300"/>
